@@ -51,12 +51,20 @@ tienePotencial n (Gimnasta nombre energia equilibrio flexibilidad fuerza ejercic
 buscarGimnastaPorCampo :: Eq b => [Gimnasta] -> (Gimnasta -> b) -> b -> Gimnasta
 buscarGimnastaPorCampo [gimnasta] _ _ = gimnasta
 buscarGimnastaPorCampo (x:xs) campo dato | campo x == dato = x
-                                                    | otherwise = buscarGimnastaPorCampo xs campo dato
+                                         | otherwise = buscarGimnastaPorCampo xs campo dato
 
 maximoDespuesDeRutina :: [Gimnasta] -> String
 maximoDespuesDeRutina gimnastas = nombre (buscarGimnastaPorCampo (map (entrenar rutinaDiaria) gimnastas) fuerza (maximum (map fuerza (map (entrenar rutinaDiaria) gimnastas))))
 
 -- b)
+fortaleza :: Gimnasta -> Int
+fortaleza (Gimnasta nombre energia equilibrio flexibilidad fuerza ejercicios) = energia + fuerza
+
+minimoEntreDosCaracteristicas :: Gimnasta -> (Gimnasta->Int) -> (Gimnasta->Int) -> ((Gimnasta->Int),Int)
+minimoEntreDosCaracteristicas gimnasta caracteristica1 caracteristica2 | (caracteristica1 gimnasta) > (caracteristica2 gimnasta) = (caracteristica2, (caracteristica2 gimnasta))
+                                                                       | otherwise = (caracteristica1, (caracteristica1 gimnasta))
+-- maximoConMinimoSuperior :: [Gimnasta] -> String
+-- maximoConMinimoSuperior gimnastas = (maximum  (map (minimoEntreDosCaracteristicas flexibilidad fortaleza) gimnastas))
 
 -- c)
 mayorCantidadDeHabilidades :: [Gimnasta] -> Int -> [Ejercicio] -> String
