@@ -102,8 +102,8 @@ maximoDespuesDeEjercicio :: [Gimnasta] -> Int -> Ejercicio -> String
 maximoDespuesDeEjercicio gimnastas cantMinutos ejercicio = nombre (maximoSegun (cantidadDeEjercicios) (entrenarConEjercicio gimnastas ejercicio cantMinutos))
 
 --5)
---Para su resolucion se utiliza composición de funciones, expresiones lambda fucnion de orden superior
--- El parametro e sera comparable ya que se define como Eq, el parametro g es una expresion lambda y una lista formada por elementos que sean iguales al parametro e
+--Para su resolucion se utiliza composición de funciones, expresiones lambda funcion de orden superior
+-- El parametro 'e' sera comparable ya que se define como Eq, el parametro 'g' es una expresion lambda y una lista formada por elementos que sean iguales al parametro 'e'
 -- Ejemplo de aplicaion de h:
 -- h 4 (\n->n*2) [1,2]   => True
 h :: Eq a1 => a1 -> (a -> a1) -> [a] -> Bool
