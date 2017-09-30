@@ -93,8 +93,11 @@ maximoConMinimoSuperior _ [elemento] = elemento
 maximoConMinimoSuperior minimoEntreDosCaracteristicas (x:y:xs) | minimoEntreDosCaracteristicas x > minimoEntreDosCaracteristicas y = maximoConMinimoSuperior minimoEntreDosCaracteristicas(x:xs)
                                                                | otherwise = maximoConMinimoSuperior minimoEntreDosCaracteristicas(y:xs)
 -- c)
--- mayorCantidadDeHabilidades :: [Gimnasta] -> Int -> Ejercicio -> String
--- mayorCantidadDeHabilidades gimnastas cantMinutos ejercicio = nombre (buscarGimnastaPorCampo (map (ejercitar cantMinutos ejercicio) gimnastas) (length . ejercicios) (maximum (map (length . ejercicios) (map (ejercitar cantMinutos ejercicio) gimnastas))))
+entrenarGimnastasConEjercicio :: [Gimnasta] -> Ejercicio -> Int -> [Gimnasta]
+entrenarGimnastasConEjercicio gimnastas ejercicio cantMinutos = map (ejercitar cantMinutos ejercicio) gimnastas
+
+maximoDespuesDeEjercicio :: [Gimnasta] -> Int -> Ejercicio -> String
+maximoDespuesDeEjercicio gimnastas cantMinutos ejercicio = nombre (maximoSegun (length.ejercicios) (entrenarGimnastasConEjercicio gimnastas ejercicio cantMinutos))
 
 --5)
 --Para su resolucion se utiliza composición de funciones, expresiones lambda fucnion de orden superior
