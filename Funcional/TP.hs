@@ -74,5 +74,28 @@ mayorCantidadDeHabilidades :: [Gimnasta] -> Int -> [Ejercicio] -> String
 mayorCantidadDeHabilidades gimnastas cantMinutos ejercicio = nombre (buscarGimnastaPorCampo (map (ejercitar cantMinutos ejercicio) gimnastas) (length . ejercicios) (maximum (map (length . ejercicios) (map (ejercitar cantMinutos ejercicio) gimnastas))))
 
 --5)
+--Para su resolucion se utiliza composición de funciones, expresiones lambda fucnion de orden superior
+-- El parametro e sera comparable ya que se define como Eq, el parametro g es una expresion lambda y una lista formada por elementos que sean iguales al parametro e
+-- Ejemplo de aplicaion de h:
+-- h 4 (\n->n*2) [1,2]   => True
 h :: Eq a1 => a1 -> (a -> a1) -> [a] -> Bool
 h e g = any((\x->x). (== e)) . map g
+
+--6)
+--a)
+-- Posible solucion pero no se puede implementar ya que el type Ejercicio no es de Eq
+--interseccion:: Eq a => [a] -> [a] -> [a]
+--interseccion ls xs = [l| l<-ls,x<-xs,l==x]
+--aprenderConValidacion :: [Ejercicio] -> Gimnasta -> Gimnasta
+--aprenderConValidacion ejercicio (Gimnasta nombre energia equilibrio flexibilidad fuerza ejercicios) = Gimnasta nombre energia equilibrio flexibilidad fuerza (interseccion ejercicios ejercicio)
+--ejercitarConValidacion :: Int -> [Ejercicio] -> Gimnasta -> Gimnasta
+--ejercitarConValidacion cantMinutos ejercicios | (div cantMinutos 2) > 0 = ejercitar (cantMinutos -2) ejercicios
+--											  | otherwise = aprenderConValidacion ejercicios
+
+
+--b)
+-- Para poder hacer un listado infinito de un data debe agregarse deriving Enum
+-- Para aplicarle la funcion h a un listado de socios encontre la siguiente resolucion
+data Socio = Ignacio | Robertino | Matias | Andrea deriving(Enum,Eq,Show)
+socioInicial = Ignacio
+-- h Ignacio (\n->n) [socioInicial..]
