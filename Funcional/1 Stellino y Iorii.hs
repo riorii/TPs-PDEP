@@ -68,13 +68,17 @@ tienePotencial n gimnasta = nivelDeFortaleza (realizarEjerciciosPersonales (entr
 
 --4)
 --a)
-buscarGimnastaPorCampo :: Eq b => [Gimnasta] -> (Gimnasta -> b) -> b -> Gimnasta
-buscarGimnastaPorCampo [gimnasta] _ _ = gimnasta
-buscarGimnastaPorCampo (x:xs) campo dato | campo x == dato = x
-                                         | otherwise = buscarGimnastaPorCampo xs campo dato
+
+entrenarGimnastasConRutina :: [Gimnasta] -> Rutina -> [Gimnasta]
+entrenarGimnastasConRutina gimnastas rutina = map (entrenar rutina) gimnastas
+
+maximoSegun :: Ord b => (Gimnasta -> b) -> [Gimnasta] -> Gimnasta
+maximoSegun _ [elemento] = elemento
+maximoSegun funcion (x:y:xs) | funcion x > funcion y = maximoSegun funcion(x:xs)
+                             | otherwise = maximoSegun funcion(y:xs)
 
 maximoDespuesDeRutina :: [Gimnasta] -> String
-maximoDespuesDeRutina gimnastas = nombre (buscarGimnastaPorCampo (map (entrenar rutinaDiaria) gimnastas) fuerza (maximum (map fuerza (map (entrenar rutinaDiaria) gimnastas))))
+maximoDespuesDeRutina gimnastas = nombre (maximoSegun fuerza (entrenarGimnastasConRutina gimnastas rutinaDiaria))
 
 -- b)
 fortaleza :: Gimnasta -> Int
@@ -89,8 +93,8 @@ maximoConMinimoSuperior _ [elemento] = elemento
 maximoConMinimoSuperior minimoEntreDosCaracteristicas (x:y:xs) | minimoEntreDosCaracteristicas x > minimoEntreDosCaracteristicas y = maximoConMinimoSuperior minimoEntreDosCaracteristicas(x:xs)
                                                                | otherwise = maximoConMinimoSuperior minimoEntreDosCaracteristicas(y:xs)
 -- c)
-mayorCantidadDeHabilidades :: [Gimnasta] -> Int -> Ejercicio -> String
-mayorCantidadDeHabilidades gimnastas cantMinutos ejercicio = nombre (buscarGimnastaPorCampo (map (ejercitar cantMinutos ejercicio) gimnastas) (length . ejercicios) (maximum (map (length . ejercicios) (map (ejercitar cantMinutos ejercicio) gimnastas))))
+-- mayorCantidadDeHabilidades :: [Gimnasta] -> Int -> Ejercicio -> String
+-- mayorCantidadDeHabilidades gimnastas cantMinutos ejercicio = nombre (buscarGimnastaPorCampo (map (ejercitar cantMinutos ejercicio) gimnastas) (length . ejercicios) (maximum (map (length . ejercicios) (map (ejercitar cantMinutos ejercicio) gimnastas))))
 
 --5)
 --Para su resolucion se utiliza composición de funciones, expresiones lambda fucnion de orden superior
