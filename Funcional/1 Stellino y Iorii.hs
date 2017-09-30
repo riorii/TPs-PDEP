@@ -115,7 +115,7 @@ h e g = any((\x->x). (== e)) . map g
 --interseccion:: Eq a => [a] -> [a] -> [a]
 --interseccion ls xs = [l| l<-ls,x<-xs,l==x]
 --aprenderConValidacion :: [Ejercicio] -> Gimnasta -> Gimnasta
---aprenderConValidacion ejercicio (Gimnasta nombre energia equilibrio flexibilidad fuerza ejercicios) = Gimnasta nombre energia equilibrio flexibilidad fuerza (interseccion ejercicios ejercicio)
+--aprenderConValidacion ejercicio gimnasta = gimnasta {ejercicios = interseccion (ejericios gimnasta) ejercicio}
 --ejercitarConValidacion :: Int -> [Ejercicio] -> Gimnasta -> Gimnasta
 --ejercitarConValidacion cantMinutos ejercicios | (div cantMinutos 2) > 0 = ejercitar (cantMinutos -2) ejercicios
 -- | otherwise = aprenderConValidacion ejercicios
