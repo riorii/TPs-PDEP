@@ -94,8 +94,13 @@ h e g = any((\x->x). (== e)) . map g
 
 
 --b)
--- Para poder hacer un listado infinito de un data debe agregarse deriving Enum
--- Para aplicarle la funcion h a un listado de socios encontre la siguiente resolucion
-data Socio = Ignacio | Robertino | Matias | Andrea deriving(Enum,Eq,Show)
-socioInicial = Ignacio
--- h Ignacio (\n->n) [socioInicial..]
+-- Hay algun socio que tenga 10 de dinero en mi listaInfinita
+-- h 10 (\n->n dinero) listaInfinita 
+-- La funcion va a terminar solo si cumple con la condicion
+data Socio = Socio {
+	name :: String,
+	dinero :: Int
+} deriving (Show)
+ignacio = Socio "ignacio" 10
+nacho = Socio "nacho" 20
+listaInfinita = cycle [ignacio,nacho]
