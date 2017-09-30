@@ -82,22 +82,24 @@ maximoDespuesDeRutina gimnastas = nombre (maximoSegun fuerza (entrenarGimnastasC
 
 -- b)
 fortaleza :: Gimnasta -> Int
-fortaleza (Gimnasta nombre energia equilibrio flexibilidad fuerza ejercicios) = energia + fuerza
+fortaleza gimnasta = (energia gimnasta) + (fuerza gimnasta)
 
-minimoEntreDosCaracteristicas :: Gimnasta -> (Gimnasta->Int) -> (Gimnasta->Int) -> Int
-minimoEntreDosCaracteristicas gimnasta caracteristica1 caracteristica2 | (caracteristica1 gimnasta) > (caracteristica2 gimnasta) = caracteristica2 gimnasta
-                                                                       | otherwise = caracteristica1 gimnasta
+minimoEntreDos :: (Gimnasta->Int) -> (Gimnasta->Int) -> Gimnasta -> Int
+minimoEntreDos funcion1 funcion2 gimnasta | (funcion1 gimnasta) > (funcion2 gimnasta) = funcion2 gimnasta
+                                          | otherwise = funcion1 gimnasta
 
-maximoConMinimoSuperior :: (Gimnasta->Int) -> [Gimnasta] -> Gimnasta
-maximoConMinimoSuperior _ [elemento] = elemento
-maximoConMinimoSuperior minimoEntreDosCaracteristicas (x:y:xs) | minimoEntreDosCaracteristicas x > minimoEntreDosCaracteristicas y = maximoConMinimoSuperior minimoEntreDosCaracteristicas(x:xs)
-                                                               | otherwise = maximoConMinimoSuperior minimoEntreDosCaracteristicas(y:xs)
+maximoConMinimo :: [Gimnasta] -> String
+maximoConMinimo gimnastas = nombre (maximoSegun (minimoEntreDos flexibilidad fortaleza) (entrenarGimnastasConRutina gimnastas rutinaDiaria))
+
 -- c)
-entrenarGimnastasConEjercicio :: [Gimnasta] -> Ejercicio -> Int -> [Gimnasta]
-entrenarGimnastasConEjercicio gimnastas ejercicio cantMinutos = map (ejercitar cantMinutos ejercicio) gimnastas
+entrenarConEjercicio :: [Gimnasta] -> Ejercicio -> Int -> [Gimnasta]
+entrenarConEjercicio gimnastas ejercicio cantMinutos = map (ejercitar cantMinutos ejercicio) gimnastas
+
+cantidadDeEjercicios :: Gimnasta -> Int
+cantidadDeEjercicios gimnasta = (length.ejercicios) gimnasta
 
 maximoDespuesDeEjercicio :: [Gimnasta] -> Int -> Ejercicio -> String
-maximoDespuesDeEjercicio gimnastas cantMinutos ejercicio = nombre (maximoSegun (length.ejercicios) (entrenarGimnastasConEjercicio gimnastas ejercicio cantMinutos))
+maximoDespuesDeEjercicio gimnastas cantMinutos ejercicio = nombre (maximoSegun (cantidadDeEjercicios) (entrenarConEjercicio gimnastas ejercicio cantMinutos))
 
 --5)
 --Para su resolucion se utiliza composición de funciones, expresiones lambda fucnion de orden superior
