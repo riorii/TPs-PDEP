@@ -20,6 +20,7 @@ saltoMortal altura  impulso (Gimnasta nombre energia equilibrio flexibilidad fue
 sonia = Gimnasta "sonia" 90 60 40 50 [medialuna,rolAdelante 20,saltoMortal 40 15]
 pedro = Gimnasta "pedro" 70 50 50 60 [saltoConSoga 150,vertical,rolAdelante 30]
 --3)
+
 aprender :: [Ejercicio] -> Gimnasta -> Gimnasta
 aprender ejercicio (Gimnasta nombre energia equilibrio flexibilidad fuerza ejercicios) = Gimnasta nombre energia equilibrio flexibilidad fuerza (ejercicios++ejercicio)
 --En consola seria (ejercitar 1 [medialuna]) sonia
@@ -57,18 +58,18 @@ maximoDespuesDeRutina :: [Gimnasta] -> String
 maximoDespuesDeRutina gimnastas = nombre (buscarGimnastaPorCampo (map (entrenar rutinaDiaria) gimnastas) fuerza (maximum (map fuerza (map (entrenar rutinaDiaria) gimnastas))))
 
 -- b)
-fortaleza :: Gimnasta -> Int
-fortaleza (Gimnasta nombre energia equilibrio flexibilidad fuerza ejercicios) = energia + fuerza
+--fortaleza :: Gimnasta -> Int
+--fortaleza (Gimnasta nombre energia equilibrio flexibilidad fuerza ejercicios) = energia + fuerza
 
-minimoEntreDosCaracteristicas ::(Gimnasta->Int) -> (Gimnasta->Int) -> Gimnasta -> Int
-minimoEntreDosCaracteristicas caracteristica1 caracteristica2 gimnasta | (caracteristica1 gimnasta) > (caracteristica2 gimnasta) = caracteristica2 gimnasta
+minimoEntreDosCaracteristicas :: Gimnasta -> (Gimnasta->Int) -> (Gimnasta->Int) -> Int
+minimoEntreDosCaracteristicas gimnasta caracteristica1 caracteristica2 | (caracteristica1 gimnasta) > (caracteristica2 gimnasta) = caracteristica2 gimnasta
                                                                        | otherwise = caracteristica1 gimnasta
-
-maximoSegun :: [Gimnasta] -> String
-maximoSegun [gimnasta] = nombre gimnasta
-maximoSegun (x:y:xs) | minimoEntreDosCaracteristicas flexibilidad fortaleza x > minimoEntreDosCaracteristicas flexibilidad fortaleza y = maximoSegun (x:xs)
-                     | otherwise = maximoSegun (y:xs)
-
+-- maximoConMinimoSuperior :: [Gimnasta] -> String
+-- maximoConMinimoSuperior gimnastas = (maximum  (map (minimoEntreDosCaracteristicas flexibilidad fortaleza) gimnastas))
+maximoConMinimoSuperior :: (Gimnasta->Int) -> [Gimnasta] -> Gimnasta
+maximoConMinimoSuperior _ [elemento] = elemento
+maximoConMinimoSuperior minimoEntreDosCaracteristicas (x:y:xs) | minimoEntreDosCaracteristicas x > minimoEntreDosCaracteristicas y = maximoConMinimoSuperior minimoEntreDosCaracteristicas(x:xs)
+                                                               | otherwise = maximoConMinimoSuperior minimoEntreDosCaracteristicas(y:xs)
 -- c)
 mayorCantidadDeHabilidades :: [Gimnasta] -> Int -> [Ejercicio] -> String
 mayorCantidadDeHabilidades gimnastas cantMinutos ejercicio = nombre (buscarGimnastaPorCampo (map (ejercitar cantMinutos ejercicio) gimnastas) (length . ejercicios) (maximum (map (length . ejercicios) (map (ejercitar cantMinutos ejercicio) gimnastas))))
@@ -90,7 +91,7 @@ h e g = any((\x->x). (== e)) . map g
 --aprenderConValidacion ejercicio (Gimnasta nombre energia equilibrio flexibilidad fuerza ejercicios) = Gimnasta nombre energia equilibrio flexibilidad fuerza (interseccion ejercicios ejercicio)
 --ejercitarConValidacion :: Int -> [Ejercicio] -> Gimnasta -> Gimnasta
 --ejercitarConValidacion cantMinutos ejercicios | (div cantMinutos 2) > 0 = ejercitar (cantMinutos -2) ejercicios
---											  | otherwise = aprenderConValidacion ejercicios
+-- | otherwise = aprenderConValidacion ejercicios
 
 
 --b)
@@ -98,8 +99,8 @@ h e g = any((\x->x). (== e)) . map g
 -- h 10 (\n->n dinero) listaInfinita 
 -- La funcion va a terminar solo si cumple con la condicion
 data Socio = Socio {
-	name :: String,
-	dinero :: Int
+ name :: String,
+ dinero :: Int
 } deriving (Show)
 ignacio = Socio "ignacio" 10
 nacho = Socio "nacho" 20
