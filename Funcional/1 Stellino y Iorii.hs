@@ -1,7 +1,8 @@
 -- Punto 1
 import Text.Show.Functions
 type Ejercicio = Gimnasta -> Gimnasta
-type Rutina = (Int,[Ejercicio])
+type EjercicioRutina = (Int,Ejercicio)
+type Rutina = (Int,[EjercicioRutina])
 data Gimnasta = Gimnasta {
  nombre :: String,
  energia :: Int,
@@ -10,42 +11,60 @@ data Gimnasta = Gimnasta {
  fuerza :: Int,
  ejercicios :: [Ejercicio]
 } deriving (Show)
-medialuna (Gimnasta nombre energia equilibrio flexibilidad fuerza ejercicios) = Gimnasta nombre energia (equilibrio+5) flexibilidad fuerza ejercicios
-rolAdelante velocidad (Gimnasta nombre energia equilibrio flexibilidad fuerza ejercicios) = Gimnasta nombre (energia+(div velocidad 2)) equilibrio flexibilidad fuerza ejercicios
-vertical (Gimnasta nombre energia equilibrio flexibilidad fuerza ejercicios) = Gimnasta nombre energia equilibrio flexibilidad (fuerza+7) ejercicios
-saltoConSoga cantSaltos (Gimnasta nombre energia equilibrio flexibilidad fuerza ejercicios) = Gimnasta nombre (energia-(div cantSaltos 2)) equilibrio flexibilidad (fuerza+cantSaltos) ejercicios
-saltoMortal altura  impulso (Gimnasta nombre energia equilibrio flexibilidad fuerza ejercicios) = Gimnasta nombre energia equilibrio (flexibilidad+(div impulso 2)) (fuerza+altura) ejercicios
+medialuna gimnasta = gimnasta {equilibrio = equilibrio gimnasta+5}
+rolAdelante velocidad gimnasta = gimnasta {energia = (energia gimnasta+(div velocidad 2))}
+vertical gimnasta = gimnasta {fuerza = fuerza gimnasta + 7}
+saltoConSoga cantSaltos gimnasta = gimnasta {energia = (energia gimnasta -(div cantSaltos 2)), fuerza = (fuerza gimnasta+cantSaltos)}
+saltoMortal altura impulso gimnasta = gimnasta {flexibilidad = (flexibilidad gimnasta+(div impulso 2)), fuerza = (fuerza gimnasta+altura)}
+
 
 --2)
 sonia = Gimnasta "sonia" 90 60 40 50 [medialuna,rolAdelante 20,saltoMortal 40 15]
 pedro = Gimnasta "pedro" 70 50 50 60 [saltoConSoga 150,vertical,rolAdelante 30]
 --3)
 
-aprender :: [Ejercicio] -> Gimnasta -> Gimnasta
-aprender ejercicio (Gimnasta nombre energia equilibrio flexibilidad fuerza ejercicios) = Gimnasta nombre energia equilibrio flexibilidad fuerza (ejercicios++ejercicio)
---En consola seria (ejercitar 1 [medialuna]) sonia
+repetir :: Int -> (Gimnasta -> Gimnasta) -> Gimnasta -> Gimnasta
+repetir 0 _ gimnasta = gimnasta
+repetir repeticiones funcion gimnasta = repetir (repeticiones-1) funcion (funcion gimnasta)
 
-ejercitar :: Int -> [Ejercicio] -> Gimnasta -> Gimnasta
-ejercitar cantMinutos ejercicios | (div cantMinutos 2) > 0 = ejercitar (cantMinutos -2) ejercicios
-                                | otherwise = aprender ejercicios
+aprender :: Ejercicio -> Gimnasta -> Gimnasta
+aprender ejercicio gimnasta = gimnasta {ejercicios = (ejercicio:(ejercicios gimnasta))}
 
+-- a)
+ejercitar :: Int -> Ejercicio -> Gimnasta -> Gimnasta
+ejercitar cantMinutos ejercicio gimnasta | (div cantMinutos 2) > 0 = ejercitar (cantMinutos -2) ejercicio (ejercicio gimnasta)
+                                          | otherwise = aprender ejercicio gimnasta
+-- b) - b)
 entradaEnCalor :: Rutina
-entradaEnCalor = (2, [rolAdelante 10,rolAdelante 10,medialuna,medialuna,medialuna,medialuna,saltoConSoga 50,saltoMortal 20 15])
+entradaEnCalor = (2, [(2 ,rolAdelante 10), (4, medialuna), (1,saltoConSoga 50), (1,saltoMortal 20 15)])
 
+-- b) - c)
 rutinaDiaria :: Rutina
-rutinaDiaria = (3, [rolAdelante 20,saltoConSoga 30,vertical,medialuna,saltoConSoga 10])
+rutinaDiaria = (3, [(1,rolAdelante 20),(1,saltoConSoga 30),(1,vertical),(1,medialuna),(1,saltoConSoga 10)])
 
-entrenar :: Rutina  -> Gimnasta -> Gimnasta
-entrenar (repeticiones ,[]) (Gimnasta nombre energia equilibrio flexibilidad fuerza ejercicios)  = Gimnasta nombre energia equilibrio flexibilidad fuerza ejercicios
-entrenar (repeticiones,(x:xs)) (Gimnasta nombre energia equilibrio flexibilidad fuerza ejercicios) | repeticiones == 1 = entrenar (repeticiones,xs) (x (Gimnasta nombre energia equilibrio flexibilidad fuerza ejercicios))
-                                                                                                   | repeticiones > 1 = entrenar (1,take ((length (x:xs))*repeticiones) (cycle (x:xs))) (Gimnasta nombre energia equilibrio flexibilidad fuerza ejercicios)
-                                                                                                   | otherwise = Gimnasta nombre energia equilibrio flexibilidad fuerza ejercicios
+-- c)
+realizarEjercicio :: Gimnasta -> Ejercicio -> Gimnasta
+realizarEjercicio gimnasta ejercicio = ejercicio gimnasta
 
+realizarEjercicioRutina :: Gimnasta -> EjercicioRutina -> Gimnasta
+realizarEjercicioRutina gimnasta (repeticiones,ejercicio) = repetir repeticiones ejercicio gimnasta
+
+realizarEjerciciosRutina :: [EjercicioRutina] -> Gimnasta -> Gimnasta
+realizarEjerciciosRutina ejercicios gimnasta = foldl realizarEjercicioRutina gimnasta ejercicios
+
+entrenar :: Rutina -> Gimnasta -> Gimnasta
+entrenar (repeticiones,ejercicios) gimnasta = repetir repeticiones (realizarEjerciciosRutina ejercicios) gimnasta
+
+
+-- d)
 nivelDeFortaleza :: Gimnasta -> Int
 nivelDeFortaleza (Gimnasta nombre energia equilibrio flexibilidad fuerza ejercicios) = energia+fuerza
 
+realizarEjerciciosPersonales :: Gimnasta -> Gimnasta
+realizarEjerciciosPersonales gimnasta = foldl realizarEjercicio gimnasta (ejercicios gimnasta)
+
 tienePotencial :: Int -> Gimnasta -> Bool
-tienePotencial n (Gimnasta nombre energia equilibrio flexibilidad fuerza ejercicios) = nivelDeFortaleza (entrenar (1,ejercicios) (entrenar rutinaDiaria (Gimnasta nombre energia equilibrio flexibilidad fuerza ejercicios))) > n
+tienePotencial n gimnasta = nivelDeFortaleza (realizarEjerciciosPersonales (entrenar rutinaDiaria gimnasta)) > n
 
 --4)
 --a)
@@ -58,20 +77,19 @@ maximoDespuesDeRutina :: [Gimnasta] -> String
 maximoDespuesDeRutina gimnastas = nombre (buscarGimnastaPorCampo (map (entrenar rutinaDiaria) gimnastas) fuerza (maximum (map fuerza (map (entrenar rutinaDiaria) gimnastas))))
 
 -- b)
---fortaleza :: Gimnasta -> Int
---fortaleza (Gimnasta nombre energia equilibrio flexibilidad fuerza ejercicios) = energia + fuerza
+fortaleza :: Gimnasta -> Int
+fortaleza (Gimnasta nombre energia equilibrio flexibilidad fuerza ejercicios) = energia + fuerza
 
 minimoEntreDosCaracteristicas :: Gimnasta -> (Gimnasta->Int) -> (Gimnasta->Int) -> Int
 minimoEntreDosCaracteristicas gimnasta caracteristica1 caracteristica2 | (caracteristica1 gimnasta) > (caracteristica2 gimnasta) = caracteristica2 gimnasta
                                                                        | otherwise = caracteristica1 gimnasta
--- maximoConMinimoSuperior :: [Gimnasta] -> String
--- maximoConMinimoSuperior gimnastas = (maximum  (map (minimoEntreDosCaracteristicas flexibilidad fortaleza) gimnastas))
+
 maximoConMinimoSuperior :: (Gimnasta->Int) -> [Gimnasta] -> Gimnasta
 maximoConMinimoSuperior _ [elemento] = elemento
 maximoConMinimoSuperior minimoEntreDosCaracteristicas (x:y:xs) | minimoEntreDosCaracteristicas x > minimoEntreDosCaracteristicas y = maximoConMinimoSuperior minimoEntreDosCaracteristicas(x:xs)
                                                                | otherwise = maximoConMinimoSuperior minimoEntreDosCaracteristicas(y:xs)
 -- c)
-mayorCantidadDeHabilidades :: [Gimnasta] -> Int -> [Ejercicio] -> String
+mayorCantidadDeHabilidades :: [Gimnasta] -> Int -> Ejercicio -> String
 mayorCantidadDeHabilidades gimnastas cantMinutos ejercicio = nombre (buscarGimnastaPorCampo (map (ejercitar cantMinutos ejercicio) gimnastas) (length . ejercicios) (maximum (map (length . ejercicios) (map (ejercitar cantMinutos ejercicio) gimnastas))))
 
 --5)
