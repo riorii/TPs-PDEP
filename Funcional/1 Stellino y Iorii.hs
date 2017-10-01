@@ -1,4 +1,5 @@
 -- Punto 1
+-- Modelado
 import Text.Show.Functions
 type Ejercicio = Gimnasta -> Gimnasta
 type EjercicioRutina = (Int,Ejercicio)
@@ -19,10 +20,11 @@ saltoMortal altura impulso gimnasta = gimnasta {flexibilidad = (flexibilidad gim
 
 
 --2)
+-- Aplicacion parcial
 sonia = Gimnasta "sonia" 90 60 40 50 [medialuna,rolAdelante 20,saltoMortal 40 15]
 pedro = Gimnasta "pedro" 70 50 50 60 [saltoConSoga 150,vertical,rolAdelante 30]
 --3)
-
+-- Recursividad
 repetir :: Int -> (Gimnasta -> Gimnasta) -> Gimnasta -> Gimnasta
 repetir 0 _ gimnasta = gimnasta
 repetir repeticiones funcion gimnasta = repetir (repeticiones-1) funcion (funcion gimnasta)
@@ -48,7 +50,7 @@ realizarEjercicio gimnasta ejercicio = ejercicio gimnasta
 
 realizarEjercicioRutina :: Gimnasta -> EjercicioRutina -> Gimnasta
 realizarEjercicioRutina gimnasta (repeticiones,ejercicio) = repetir repeticiones ejercicio gimnasta
-
+-- Funcion de Orden Superior
 realizarEjerciciosRutina :: [EjercicioRutina] -> Gimnasta -> Gimnasta
 realizarEjerciciosRutina ejercicios gimnasta = foldl realizarEjercicioRutina gimnasta ejercicios
 
@@ -71,7 +73,7 @@ tienePotencial n gimnasta = nivelDeFortaleza (realizarEjerciciosPersonales (entr
 
 entrenarGimnastasConRutina :: [Gimnasta] -> Rutina -> [Gimnasta]
 entrenarGimnastasConRutina gimnastas rutina = map (entrenar rutina) gimnastas
-
+--Funcion de Orden Superior
 maximoSegun :: Ord b => (Gimnasta -> b) -> [Gimnasta] -> Gimnasta
 maximoSegun _ [elemento] = elemento
 maximoSegun funcion (x:y:xs) | funcion x > funcion y = maximoSegun funcion(x:xs)
@@ -94,7 +96,7 @@ maximoConMinimo gimnastas = nombre (maximoSegun (minimoEntreDos flexibilidad for
 -- c)
 entrenarConEjercicio :: [Gimnasta] -> Ejercicio -> Int -> [Gimnasta]
 entrenarConEjercicio gimnastas ejercicio cantMinutos = map (ejercitar cantMinutos ejercicio) gimnastas
-
+-- Composicion
 cantidadDeEjercicios :: Gimnasta -> Int
 cantidadDeEjercicios gimnasta = (length.ejercicios) gimnasta
 
