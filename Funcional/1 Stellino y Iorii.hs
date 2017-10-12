@@ -12,11 +12,24 @@ data Gimnasta = Gimnasta {
  fuerza :: Int,
  ejercicios :: [Ejercicio]
 } deriving (Show)
-medialuna gimnasta = gimnasta {equilibrio = equilibrio gimnasta+5}
-rolAdelante velocidad gimnasta = gimnasta {energia = (energia gimnasta+(div velocidad 2))}
-vertical gimnasta = gimnasta {fuerza = fuerza gimnasta + 7}
-saltoConSoga cantSaltos gimnasta = gimnasta {energia = (energia gimnasta -(div cantSaltos 2)), fuerza = (fuerza gimnasta+cantSaltos)}
-saltoMortal altura impulso gimnasta = gimnasta {flexibilidad = (flexibilidad gimnasta+(div impulso 2)), fuerza = (fuerza gimnasta+altura)}
+
+aumentarEnergiaEn :: Int -> Gimnasta -> Gimnasta
+aumentarEnergiaEn cantidad gimnasta = gimnasta {energia = energia gimnasta + cantidad}
+
+aumentarEquilibrioEn :: Int -> Gimnasta -> Gimnasta
+aumentarEquilibrioEn cantidad gimnasta = gimnasta {equilibrio = equilibrio gimnasta + cantidad}
+
+aumentarFlexibilidadEn :: Int -> Gimnasta -> Gimnasta
+aumentarFlexibilidadEn cantidad gimnasta = gimnasta {flexibilidad = flexibilidad gimnasta + cantidad}
+
+aumentarFuerzaEn :: Int -> Gimnasta -> Gimnasta
+aumentarFuerzaEn cantidad gimnasta = gimnasta {fuerza = fuerza gimnasta + cantidad}
+
+medialuna gimnasta = aumentarEquilibrioEn 5 gimnasta
+rolAdelante velocidad gimnasta = aumentarEnergiaEn (div velocidad 2) gimnasta
+vertical gimnasta = aumentarFuerzaEn 7 gimnasta
+saltoConSoga cantSaltos gimnasta = (aumentarFuerzaEn cantSaltos.aumentarEnergiaEn (-div cantSaltos 2)) gimnasta
+saltoMortal altura impulso gimnasta = (aumentarFuerzaEn altura.aumentarFlexibilidadEn (div impulso 2)) gimnasta
 
 
 --2)
@@ -66,13 +79,13 @@ realizarEjerciciosPersonales :: Gimnasta -> Gimnasta
 realizarEjerciciosPersonales gimnasta = foldl realizarEjercicio gimnasta (ejercicios gimnasta)
 
 tienePotencial :: Int -> Gimnasta -> Bool
-tienePotencial n gimnasta = nivelDeFortaleza (realizarEjerciciosPersonales (entrenar rutinaDiaria gimnasta)) > n
+tienePotencial n gimnasta = (nivelDeFortaleza.realizarEjerciciosPersonales.entrenar rutinaDiaria) gimnasta > n
 
 --4)
 --a)
 
-entrenarGimnastasConRutina :: [Gimnasta] -> Rutina -> [Gimnasta]
-entrenarGimnastasConRutina gimnastas rutina = map (entrenar rutina) gimnastas
+entrenarGimnastasConRutina :: Rutina -> [Gimnasta] -> [Gimnasta]
+entrenarGimnastasConRutina rutina gimnastas = map (entrenar rutina) gimnastas
 --Funcion de Orden Superior
 maximoSegun :: Ord b => (Gimnasta -> b) -> [Gimnasta] -> Gimnasta
 maximoSegun _ [elemento] = elemento
@@ -80,7 +93,7 @@ maximoSegun funcion (x:y:xs) | funcion x > funcion y = maximoSegun funcion(x:xs)
                              | otherwise = maximoSegun funcion(y:xs)
 
 maximoDespuesDeRutina :: [Gimnasta] -> String
-maximoDespuesDeRutina gimnastas = nombre (maximoSegun fuerza (entrenarGimnastasConRutina gimnastas rutinaDiaria))
+maximoDespuesDeRutina gimnastas = (nombre.maximoSegun fuerza.entrenarGimnastasConRutina rutinaDiaria) gimnastas
 
 -- b)
 fortaleza :: Gimnasta -> Int
@@ -91,17 +104,17 @@ minimoEntreDos funcion1 funcion2 gimnasta | (funcion1 gimnasta) > (funcion2 gimn
                                           | otherwise = funcion1 gimnasta
 
 maximoConMinimo :: [Gimnasta] -> String
-maximoConMinimo gimnastas = nombre (maximoSegun (minimoEntreDos flexibilidad fortaleza) (entrenarGimnastasConRutina gimnastas rutinaDiaria))
+maximoConMinimo gimnastas = (nombre.maximoSegun (minimoEntreDos flexibilidad fortaleza).entrenarGimnastasConRutina rutinaDiaria) gimnastas
 
 -- c)
-entrenarConEjercicio :: [Gimnasta] -> Ejercicio -> Int -> [Gimnasta]
-entrenarConEjercicio gimnastas ejercicio cantMinutos = map (ejercitar cantMinutos ejercicio) gimnastas
+entrenarConEjercicio :: Ejercicio -> Int -> [Gimnasta] -> [Gimnasta]
+entrenarConEjercicio ejercicio cantMinutos gimnastas = map (ejercitar cantMinutos ejercicio) gimnastas
 -- Composicion
 cantidadDeEjercicios :: Gimnasta -> Int
 cantidadDeEjercicios gimnasta = (length.ejercicios) gimnasta
 
 maximoDespuesDeEjercicio :: [Gimnasta] -> Int -> Ejercicio -> String
-maximoDespuesDeEjercicio gimnastas cantMinutos ejercicio = nombre (maximoSegun (cantidadDeEjercicios) (entrenarConEjercicio gimnastas ejercicio cantMinutos))
+maximoDespuesDeEjercicio gimnastas cantMinutos ejercicio = (nombre.maximoSegun (cantidadDeEjercicios).entrenarConEjercicio ejercicio cantMinutos) gimnastas
 
 --5)
 --Para su resolucion se utiliza composición de funciones, expresiones lambda funcion de orden superior
