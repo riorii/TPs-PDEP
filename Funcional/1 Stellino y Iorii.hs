@@ -82,6 +82,12 @@ tienePotencial :: Int -> Gimnasta -> Bool
 tienePotencial n gimnasta = (nivelDeFortaleza.realizarEjerciciosPersonales.entrenar rutinaDiaria) gimnasta > n
 
 --4)
+nombreMaximoGenericoConRutina :: (Gimnasta -> Int) -> Rutina -> [Gimnasta] -> String
+nombreMaximoGenericoConRutina criterio_maximo rutina gimnastas = (nombre.maximoSegun criterio_maximo.entrenarGimnastasConRutina rutina) gimnastas
+
+nombreMaximoGenericoConEjercicio :: (Gimnasta -> Int) -> Ejercicio -> Int -> [Gimnasta] -> String
+nombreMaximoGenericoConEjercicio criterio_maximo ejercicio cantMinutos gimnastas = (nombre.maximoSegun criterio_maximo.entrenarConEjercicio ejercicio cantMinutos) gimnastas
+
 --a)
 
 entrenarGimnastasConRutina :: Rutina -> [Gimnasta] -> [Gimnasta]
@@ -93,7 +99,8 @@ maximoSegun funcion (x:y:xs) | funcion x > funcion y = maximoSegun funcion(x:xs)
                              | otherwise = maximoSegun funcion(y:xs)
 
 maximoDespuesDeRutina :: [Gimnasta] -> String
-maximoDespuesDeRutina gimnastas = (nombre.maximoSegun fuerza.entrenarGimnastasConRutina rutinaDiaria) gimnastas
+maximoDespuesDeRutina gimnastas = nombreMaximoGenericoConRutina fuerza rutinaDiaria gimnastas
+
 
 -- b)
 fortaleza :: Gimnasta -> Int
@@ -104,7 +111,8 @@ minimoEntreDos funcion1 funcion2 gimnasta | (funcion1 gimnasta) > (funcion2 gimn
                                           | otherwise = funcion1 gimnasta
 
 maximoConMinimo :: [Gimnasta] -> String
-maximoConMinimo gimnastas = (nombre.maximoSegun (minimoEntreDos flexibilidad fortaleza).entrenarGimnastasConRutina rutinaDiaria) gimnastas
+maximoConMinimo gimnastas = nombreMaximoGenericoConRutina (minimoEntreDos flexibilidad fortaleza) rutinaDiaria gimnastas
+
 
 -- c)
 entrenarConEjercicio :: Ejercicio -> Int -> [Gimnasta] -> [Gimnasta]
@@ -114,7 +122,7 @@ cantidadDeEjercicios :: Gimnasta -> Int
 cantidadDeEjercicios gimnasta = (length.ejercicios) gimnasta
 
 maximoDespuesDeEjercicio :: [Gimnasta] -> Int -> Ejercicio -> String
-maximoDespuesDeEjercicio gimnastas cantMinutos ejercicio = (nombre.maximoSegun (cantidadDeEjercicios).entrenarConEjercicio ejercicio cantMinutos) gimnastas
+maximoDespuesDeEjercicio gimnastas cantMinutos ejercicio = nombreMaximoGenericoConEjercicio (cantidadDeEjercicios) ejercicio cantMinutos gimnastas
 
 --5)
 --Para su resolucion se utiliza composición de funciones, expresiones lambda funcion de orden superior
