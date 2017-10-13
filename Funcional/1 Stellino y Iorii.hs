@@ -58,9 +58,6 @@ rutinaDiaria :: Rutina
 rutinaDiaria = (3, [(1,rolAdelante 20),(1,saltoConSoga 30),(1,vertical),(1,medialuna),(1,saltoConSoga 10)])
 
 -- c)
-realizarEjercicio :: Gimnasta -> Ejercicio -> Gimnasta
-realizarEjercicio gimnasta ejercicio = ejercicio gimnasta
-
 realizarEjercicioRutina :: Gimnasta -> EjercicioRutina -> Gimnasta
 realizarEjercicioRutina gimnasta (repeticiones,ejercicio) = repetir repeticiones ejercicio gimnasta
 -- Funcion de Orden Superior
@@ -76,7 +73,7 @@ nivelDeFortaleza :: Gimnasta -> Int
 nivelDeFortaleza (Gimnasta nombre energia equilibrio flexibilidad fuerza ejercicios) = energia+fuerza
 
 realizarEjerciciosPersonales :: Gimnasta -> Gimnasta
-realizarEjerciciosPersonales gimnasta = foldl realizarEjercicio gimnasta (ejercicios gimnasta)
+realizarEjerciciosPersonales gimnasta = foldr ($) gimnasta (ejercicios gimnasta) 
 
 tienePotencial :: Int -> Gimnasta -> Bool
 tienePotencial n gimnasta = (nivelDeFortaleza.realizarEjerciciosPersonales.entrenar rutinaDiaria) gimnasta > n
