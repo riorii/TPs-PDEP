@@ -1,5 +1,6 @@
 object joaquin {
 	var solista = true
+	var habilidad = 20
 	/*Setter */
 	method solista(unValor) {
 		solista = unValor
@@ -11,9 +12,9 @@ object joaquin {
 
 	method habilidad() {
 		if(solista) {
-			return 20
+			return habilidad
 		} else {
-			return 50
+			return (habilidad + 5)
 		}
 	}
 	
@@ -22,7 +23,7 @@ object joaquin {
 	}
 	
 	method cobra(unaPresentacion) {
-		if(solista){
+		if(unaPresentacion.tocaSolo()){
 			return 100 * unaPresentacion.duracion()
 		} else {
 			return 50
@@ -33,6 +34,7 @@ object joaquin {
 
 object lucia {
 	var solista = true
+	var habilidad = 70
 	/*Setter */
 	method solista(unValor) {
 		solista = unValor
@@ -44,9 +46,9 @@ object lucia {
 	
 	method habilidad() {
 		if(solista) {
-			return 70
+			return habilidad
 		} else {
-			return (self.habilidad() - 20)
+			return (habilidad - 20)
 		}
 	}
 	
@@ -91,7 +93,7 @@ object luisAlberto {
 		
 	method cobra(unaPresentacion) {
 		if(self.anterior(unaPresentacion)) {
-			return 100
+			return 1000
 		} else {
 			return 1200
 		}
@@ -99,6 +101,38 @@ object luisAlberto {
 	
 	method anterior(unaPresentacion) {
 		return unaPresentacion.fecha().year() == 2017 && unaPresentacion.fecha().month() < 9
+	}
+}
+
+object fender {
+	var precio = 10
+	/*Setter */
+	method precio(unPrecio) {
+		precio = unPrecio
+	}
+	/*Getter */
+	method precio () {
+		return precio
+	}
+}
+
+object gibson {
+	var estaSana = true
+	/*Setter */
+	method estaSana(unValor) {
+		estaSana = unValor
+	}
+	/*Getter */
+	method estaSana() {
+		return estaSana
+	}
+	
+	method precio() {
+		if(estaSana) {
+			return 15
+		} else {
+			return 5
+		}
 	}
 }
 
@@ -119,18 +153,27 @@ class Canciones {
 	method letra() {
 		return letra
 	}
+	
+	method tienePalabra(unaPalabra) {
+		return (self.letra().contains(unaPalabra))
+	}
+	
 }
 
 class Presentacion {
 	var fecha
 	var lugar
 	var cantantes = []
+	var duracion
 	/*Setters */
 	method fecha(unaFecha) {
 		fecha = unaFecha
 	}
 	method lugar(unLugar) {
 		lugar = unLugar
+	}
+	method duracion(unaDuracion) {
+		duracion = unaDuracion
 	}
 	/*Getters */
 	method fecha() {
@@ -139,16 +182,52 @@ class Presentacion {
 	method lugar() {
 		return lugar
 	}
+	method duracion() {
+		return duracion
+	}
+
+	method capacidad() {
+		return lugar.capacidad()
+	}	
+	method agregarCantante(unCantante) {
+		cantantes.add(unCantante)	
+	}
+	method tocaSolo() {
+		return (cantantes.size() == 1)
+	}
+	method calcularCosto() {
+		return cantantes.sum({cantante => cantante.cobra(self)})
+	}
 }
 
 class Lugar {
 	var capacidad
+	var nombre
 	/*Setter */
-	method capacidad(unaCapacidad) {
-		capacidad = unaCapacidad
+	method capacidad(unaPresentacion) {
+		if(nombre.contains("Luna Park")) {
+			capacidad = 9290
+		} else {
+			self.calcularCapacidad(unaPresentacion)
+		}
+	}
+	method nombre(unNombre) {
+		nombre = unNombre
 	}
 	/*Getter */
 	method capacidad() {
 		return capacidad
 	}
+	method nombre() {
+		return nombre
+	}
+	
+	method calcularCapacidad(unaPresentacion) {
+		if(unaPresentacion.fecha().dayOfWeek() == 6) {
+			capacidad =  700
+		} else {
+			capacidad = 400
+		}	
+	}
+	
 }
