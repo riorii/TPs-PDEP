@@ -12,7 +12,7 @@ describe "Test de Primera Parte" {
 		laFamilia.duracion(264)
 		cisne.duracion(312)
 		laFamilia.letra("Quiero brindar por mi gente sencilla, por el amor brindo por la familia")
-		cisne.letra("Hoy el viento se abriÛ quedÛ vacÌo el aire una vez m·s y el manantial brotÛ y nadie est· aquÌ y puedo ver que solo estallan las hojas al brillar")
+		cisne.letra("Hoy el viento se abri√≥ qued√≥ vac√≠o el aire una vez m√°s y el manantial brot√≥ y nadie est√° aqu√≠ y puedo ver que solo estallan las hojas al brillar")
 	}
 	
 test "conocerHabilidadJoaquinEnGrupo" {
