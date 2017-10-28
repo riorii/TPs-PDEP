@@ -1,26 +1,12 @@
 class Musico {
 	var habilidad
 	var solista
-	var albumes = []
-	/*Setters */
-	method habilidad(unaCantidad){
-		habilidad = unaCantidad
-	}	
-	method solista(unValor){
-		solista = unValor
-	}
-	method albumes(listaDeAlbumes){
-		albumes = listaDeAlbumes
-	}
-	/*Getters */
-	method habilidad(){
-		return habilidad
-	}
-	method solista(){
-		return solista
-	}
-	method albumesPublicados(){
-		return albumes
+	var albumes
+	
+	constructor(_habilidad, _solista, _albumes){
+		habilidad = _habilidad
+		solista = _solista
+		albumes = _albumes
 	}
 	
 	method esMinimalista(){
