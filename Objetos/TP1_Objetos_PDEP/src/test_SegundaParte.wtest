@@ -56,4 +56,37 @@ describe "Test de Segunda Parte" {
 	test "JuaquinEsMinimalista"{
 		assert.notThat(joaquin.esMinimalista())
 	}
+	test "CancionesLuisAlbertoConPalabraCielo"{
+		assert.equals(['Alma de diamante','Crisantemo'], luisAlberto.cancionesConPalabra('cielo'))
+	}
+	test "CancionesLuisAlbertoConPalabraPujante"{
+		assert.equals([], luisAlberto.cancionesConPalabra('pujante'))
+	}
+	test "SegundosObraDeKike"{
+		assert.equals(0,kike.segundosDeObra())
+	}
+	test "SegundosObraDeSoledad"{
+		assert.equals(299, soledad.segundosDeObra())
+	}
+	test "SegundosObraDeLuis"{
+		assert.equals(703, luisAlberto.segundosDeObra())
+	}
+	test "CancionMasLargaParaLosArboles"{
+		assert.equals("Alma de diamante", paraLosArboles.cancionMasLarga())
+	}
+	test "CancionMasLargaLaSole"{
+		assert.equals("Eres", laSole.cancionMasLarga())
+	}
+	test "CancionMasLargaEspecialLaFamilia"{
+		assert.equals("La Familia", especialLaFamilia.cancionMasLarga())
+	}
+	test "LuisAlbertoLaPego"{
+		assert.that(luisAlberto.laPego())
+	}
+	test "SoledadLaPego"{
+		assert.notThat(soledad.laPego())
+	}
+	test "joaquinLaPego"{
+		assert.that(joaquin.laPego())
+	}
 }
