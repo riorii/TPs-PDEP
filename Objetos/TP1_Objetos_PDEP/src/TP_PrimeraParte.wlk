@@ -150,12 +150,9 @@ class Canciones {
 	method duracion() {
 		return duracion
 	}
-	method letra() {
-		return letra
-	}
 	
 	method tienePalabra(unaPalabra) {
-		return (self.letra().contains(unaPalabra))
+		return (letra.contains(unaPalabra))
 	}
 	
 }

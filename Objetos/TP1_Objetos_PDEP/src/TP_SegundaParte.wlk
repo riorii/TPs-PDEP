@@ -40,21 +40,59 @@ class Musico {
 class MusicoDeGrupo inherits Musico{
 	var plusPorGrupo
 	
-	constructor(_habilidad, _solista, _albumes, _plusPorGrupo){
+	constructor(_habilidad, _plusPorGrupo){
 		habilidad = _habilidad
-		solista = _solista
-		albumes = _albumes
 		plusPorGrupo = _plusPorGrupo 
+	}
+	
+	method interpretaBien(unaCancion) {
+		return (unaCancion.duracion() > 300)
+	}
+	
+	method cobra(unaPresentacion) {
+		if(unaPresentacion.tocaSolo()){
+			return 100 * unaPresentacion.duracion()
+		} else {
+			return 50+plusPorGrupo
+		}		
+	}
+	override method habilidad() {
+		if(solista) {
+			return habilidad
+		} else {
+			return (habilidad + 5)
+		}
 	}
 }
 
 class VocalistaPopular inherits Musico{
 	var palabraInspiradora
-	constructor(_habilidad, _solista, _albumes, _palabraInspiradora){
+	
+	constructor(_habilidad, _palabraInspiradora){
 		habilidad = _habilidad
-		solista = _solista
-		albumes = _albumes
 		palabraInspiradora = _palabraInspiradora
+	}
+	
+	method interpretaBien(unaCancion) {
+		return (unaCancion.tienePalabra(palabraInspiradora))
+	}
+	method cobra(unaPresentacion) {
+		if(self.lugarConcurrido(unaPresentacion)){
+			return 500
+		} else {
+			return 400
+		}		
+	}
+	method lugarConcurrido(unaPresentacion) {
+		return unaPresentacion.capacidad() > 5000	
+	}
+	
+	override method habilidad() {
+		if(solista) {
+			return habilidad
+		} else {
+			return (habilidad - 20)
+		}
 	}
 }
 
@@ -69,11 +107,55 @@ object luisAlberto inherits Musico{
 		return guitarraToca
 	}
 	
+	method interpretaBien () = true
+	method cobra(unaPresentacion) {
+		if(self.anterior(unaPresentacion)) {
+			return 1000
+		} else {
+			return 1200
+		}
+	}
+	method anterior(unaPresentacion) {
+		return unaPresentacion.fecha().year() == 2017 && unaPresentacion.fecha().month() < 9
+	}
+	
 	override method habilidad() {
 		if((guitarraToca.precio()*8) > 100) {
 			return 100
 		} else {
 			return (guitarraToca.precio() *8)
+		}
+	}
+}
+
+object fender {
+	var precio = 10
+	/*Setter */
+	method precio(unPrecio) {
+		precio = unPrecio
+	}
+	/*Getter */
+	method precio () {
+		return precio
+	}
+}
+
+object gibson {
+	var estaSana = true
+	/*Setter */
+	method estaSana(unValor) {
+		estaSana = unValor
+	}
+	/*Getter */
+	method estaSana() {
+		return estaSana
+	}
+	
+	method precio() {
+		if(estaSana) {
+			return 15
+		} else {
+			return 5
 		}
 	}
 }
@@ -112,8 +194,87 @@ class Cancion{
 		letra = _letra
 		duracion = _duracion
 	}
+	/*Getter */
+	method duracion(){
+		return duracion
+	}
+	
+	method tienePalabra(unaPalabra) {
+		return (letra.contains(unaPalabra))
+	}
 	
 	method duracionMenorA(unValor){
 		return ((duracion/60) < unValor)
 	}
+}
+
+class Presentacion {
+	var fecha
+	var lugar
+	var cantantes = []
+	var duracion
+	/*Setters */
+	method fecha(unaFecha) {
+		fecha = unaFecha
+	}
+	method lugar(unLugar) {
+		lugar = unLugar
+	}
+	method duracion(unaDuracion) {
+		duracion = unaDuracion
+	}
+	/*Getters */
+	method fecha() {
+		return fecha
+	}
+	method lugar() {
+		return lugar
+	}
+	method duracion() {
+		return duracion
+	}
+
+	method capacidad() {
+		return lugar.capacidad()
+	}	
+	method agregarCantante(unCantante) {
+		cantantes.add(unCantante)	
+	}
+	method tocaSolo() {
+		return (cantantes.size() == 1)
+	}
+	method calcularCosto() {
+		return cantantes.sum({cantante => cantante.cobra(self)})
+	}
+}
+
+class Lugar {
+	var capacidad
+	var nombre
+	/*Setter */
+	method capacidad(unaPresentacion) {
+		if(nombre.contains("Luna Park")) {
+			capacidad = 9290
+		} else {
+			self.calcularCapacidad(unaPresentacion)
+		}
+	}
+	method nombre(unNombre) {
+		nombre = unNombre
+	}
+	/*Getter */
+	method capacidad() {
+		return capacidad
+	}
+	method nombre() {
+		return nombre
+	}
+	
+	method calcularCapacidad(unaPresentacion) {
+		if(unaPresentacion.fecha().dayOfWeek() == 6) {
+			capacidad =  700
+		} else {
+			capacidad = 400
+		}	
+	}	
 }

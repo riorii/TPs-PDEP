@@ -1,0 +1,34 @@
+import TP_SegundaParte.*
+describe "Test de Segunda Parte" {
+	// Personajes
+	var joaquin
+	var lucia
+	var kike
+	var soledad
+	// Canciones
+	var laFamilia
+	var eres
+	var corazon_americano
+	//Albumes
+	var especialLaFamilia
+	var laSole
+	
+	fixture {
+		//Personajes
+		joaquin = new MusicoDeGrupo(20, 5)
+		lucia = new VocalistaPopular(70, 'familia')
+		kike = new MusicoDeGrupo(60, 20)
+		soledad = new VocalistaPopular(55, 'amor')
+		//Canciones
+		laFamilia = new Cancion("La Familia","Quiero brindar por mi gente sencilla, por el amor brindo por la familia", 264)
+		eres = new Cancion("Eres","Eres lo mejor que me pasó en la vida, no tengo duda, no habrá más nada después de ti. Eres lo que le dio brillo al día a día, y así será por siempre, no cambiará, hasta el final de mis días.",145)
+		corazon_americano = new Cancion("Corazón Americano","Canta corazón, canta más alto, que tu pena al fin se va marchando, el nuevo milenio ha de encontrarnos, junto corazón, como soñamos.",154)
+		//Albumes
+		especialLaFamilia = new Album("Especial La Familia","17/06/1992",100000, 89000,[laFamilia])
+		laSole = new Album("La Sole","04/02/2005",200000,130000,[eres,corazon_americano])
+	}
+test "conocerHabilidadJoaquinEnGrupo" {
+	joaquin.solista(false)
+	assert.equals(25, joaquin.habilidad())
+	}
+}
