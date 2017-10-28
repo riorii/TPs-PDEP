@@ -2,11 +2,25 @@ class Musico {
 	var habilidad
 	var solista
 	var albumes
-	
-	constructor(_habilidad, _solista, _albumes){
-		habilidad = _habilidad
-		solista = _solista
-		albumes = _albumes
+	/*Setters */
+	method habilidad(unaCantidad){
+		habilidad = unaCantidad
+	}	
+	method solista(unValor){
+		solista = unValor
+	}
+	method albumes(listaDeAlbumes){
+		albumes = listaDeAlbumes
+	}
+	/*Getters */
+	method habilidad(){
+		return habilidad
+	}
+	method solista(){
+		return solista
+	}
+	method albumesPublicados(){
+		return albumes
 	}
 	
 	method esMinimalista(){
@@ -16,21 +30,26 @@ class Musico {
 
 class MusicoDeGrupo inherits Musico{
 	var plusPorGrupo
-	/*Setter */
-	method plusPorGrupo(unValor){
-		plusPorGrupo = unValor
+	
+	constructor(_habilidad, _solista, _albumes, _plusPorGrupo){
+		habilidad = _habilidad
+		solista = _solista
+		albumes = _albumes
+		plusPorGrupo = _plusPorGrupo 
 	}
 }
 
 class VocalistaPopular inherits Musico{
 	var palabraInspiradora
-	/*Setter */
-	method palabraInspiradora(unaPalabra){
-		palabraInspiradora = unaPalabra
-	}	
+	constructor(_habilidad, _solista, _albumes, _palabraInspiradora){
+		habilidad = _habilidad
+		solista = _solista
+		albumes = _albumes
+		palabraInspiradora = _palabraInspiradora
+	}
 }
 
-class MusicoUnico inherits Musico{
+object luisAlberto inherits Musico{
 	var guitarraToca
 	/*Setter */
 	method guitarraToca(unaGuitarra) {
