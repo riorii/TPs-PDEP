@@ -23,9 +23,18 @@ class Musico {
 		return albumes
 	}
 	
+	// Funcionalidad 1
 	method esMinimalista(){
-		return albumes.all{album => album.cancionesMenoresA(3)}
+		return albumes.all({album => album.cancionesMenoresA(3)})
 	}
+	// Funcionalidad 2
+	method cancionesConPalabra(unaPalabra){
+		return (albumes.map({album => album.cancionesConPalabra(unaPalabra)})).flatten()
+	}
+	// Funcionalidad 3
+//	method segundosDeObra(){
+//		
+//	}
 }
 
 class MusicoDeGrupo inherits Musico{
@@ -85,7 +94,11 @@ class Album{
 	}
 	
 	method cancionesMenoresA(unValor){
-		return canciones.all{cancion => cancion.duracionMenorA(unValor)}
+		return canciones.all({cancion => cancion.duracionMenorA(unValor)})
+	}
+	
+	method cancionesConPalabra(unaPalabra){
+		return canciones.find({cancion => cancion.contains(unaPalabra)})
 	}
 }
 
