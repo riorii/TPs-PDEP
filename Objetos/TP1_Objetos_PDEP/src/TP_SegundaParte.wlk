@@ -12,7 +12,7 @@ class Musico {
 	method agregarAlbum(album){
 		albumes.add(album)
 	}
-	method agregarMuchosAlbumes(listaDeAlbumes){
+	method agregarAlbumes(listaDeAlbumes){
 		albumes.addAll(listaDeAlbumes)
 	}
 	/*Getters */
@@ -28,7 +28,7 @@ class Musico {
 	
 	// Funcionalidad 1
 	method esMinimalista(){
-		return albumes.all({album => album.cancionesMenoresA(3)})
+		return albumes.all({album => album.cancionesCortas()})
 	}
 	// Funcionalidad 2
 	method cancionesConPalabra(unaPalabra){
@@ -183,8 +183,8 @@ class Album{
 		canciones = _canciones
 	}
 	
-	method cancionesMenoresA(unValor){
-		return canciones.all({cancion => cancion.duracionMenorA(unValor)})
+	method cancionesCortas(){
+		return canciones.all({cancion => cancion.esCorta()})
 	}
 	
 	method porcentajeVendido(){
@@ -228,8 +228,8 @@ class Cancion{
 		return (letra.contains(unaPalabra))
 	}
 	
-	method duracionMenorA(unValor){
-		return ((duracion/60) < unValor)
+	method esCorta(){
+		return ((duracion/60) < 3)
 	}
 	
 	method largoCancion(){
