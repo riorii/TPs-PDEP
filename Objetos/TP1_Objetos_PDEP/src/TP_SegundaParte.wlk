@@ -1,7 +1,7 @@
 class Musico {
 	var habilidad
 	var solista
-	var albumes
+	var albumes = []
 	/*Setters */
 	method habilidad(unaCantidad){
 		habilidad = unaCantidad
@@ -9,8 +9,11 @@ class Musico {
 	method solista(unValor){
 		solista = unValor
 	}
-	method albumes(listaDeAlbumes){
-		albumes = listaDeAlbumes
+	method agregarAlbum(album){
+		albumes.add(album)
+	}
+	method agregarMuchosAlbumes(listaDeAlbumes){
+		albumes.addAll(listaDeAlbumes)
 	}
 	/*Getters */
 	method habilidad(){
@@ -32,9 +35,14 @@ class Musico {
 		return (albumes.map({album => album.cancionesConPalabra(unaPalabra)})).flatten()
 	}
 	// Funcionalidad 3
-//	method segundosDeObra(){
-//		
-//	}
+	method segundosDeObra(){ 
+		return (albumes.map({album => album.duracionAlbum()})).sum()
+	}
+	// Funcionalidad 5
+	method laPego(){
+		var porcentajes = albumes.map({album => album.porcentajeVendido()})
+		return ((porcentajes.sum())/porcentajes.size() > 75)
+	}
 }
 
 class MusicoDeGrupo inherits Musico{
@@ -179,8 +187,25 @@ class Album{
 		return canciones.all({cancion => cancion.duracionMenorA(unValor)})
 	}
 	
+	method porcentajeVendido(){
+		return (unidadesVendidas*100)/unidadesALaVenta
+	}
 	method cancionesConPalabra(unaPalabra){
-		return canciones.find({cancion => cancion.contains(unaPalabra)})
+		var listaCanciones = []
+		canciones.forEach({cancion =>
+			if(cancion.tienePalabra(unaPalabra)){
+				listaCanciones.add(cancion)
+			}
+		})
+		return listaCanciones
+	}
+	
+	method duracionAlbum(){
+		return (canciones.map({cancion => cancion.duracion()})).sum()
+	}
+//	Funcionalidad 4
+	method cancionMasLarga(){
+		return canciones.max({cancion => cancion.largoCancion()})
 	}
 }
 
@@ -205,6 +230,10 @@ class Cancion{
 	
 	method duracionMenorA(unValor){
 		return ((duracion/60) < unValor)
+	}
+	
+	method largoCancion(){
+		return letra.size()
 	}
 }
 
