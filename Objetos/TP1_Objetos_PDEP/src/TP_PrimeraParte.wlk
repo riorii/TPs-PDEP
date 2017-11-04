@@ -100,7 +100,7 @@ object luisAlberto {
 	}
 	
 	method anterior(unaPresentacion) {
-		return unaPresentacion.fecha().year() == 2017 && unaPresentacion.fecha().month() < 9
+		return unaPresentacion.fecha().year() <= 2017 && unaPresentacion.fecha().month() < 9
 	}
 	
 	method multiplicarPrecioGuitarraPor(unNum) {
