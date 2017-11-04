@@ -203,11 +203,9 @@ class Album{
 	}
 	method cancionesConPalabra(unaPalabra){
 		var listaCanciones = []
-		canciones.forEach({cancion =>
-			if(cancion.tienePalabra(unaPalabra)){
-				listaCanciones.add(cancion)
-			}
-		})
+		listaCanciones = canciones.filter({cancion =>
+							cancion.tienePalabra(unaPalabra)
+						})
 		return listaCanciones
 	}
 	
