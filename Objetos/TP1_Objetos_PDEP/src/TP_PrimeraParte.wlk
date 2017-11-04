@@ -82,10 +82,10 @@ object luisAlberto {
 	}
 	
 	method habilidad() {
-		if((guitarraToca.precio()*8) > 100) {
+		if(self.multiplicarPrecioGuitarraPor(8) > 100) {
 			return 100
 		} else {
-			return (guitarraToca.precio() *8)
+			return self.multiplicarPrecioGuitarraPor(8)
 		}
 	}
 	
@@ -101,6 +101,10 @@ object luisAlberto {
 	
 	method anterior(unaPresentacion) {
 		return unaPresentacion.fecha().year() == 2017 && unaPresentacion.fecha().month() < 9
+	}
+	
+	method multiplicarPrecioGuitarraPor(unNum) {
+		return guitarraToca.precio()*unNum
 	}
 }
 
