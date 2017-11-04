@@ -202,11 +202,9 @@ class Album{
 		return (unidadesVendidas*100)/unidadesALaVenta
 	}
 	method cancionesConPalabra(unaPalabra){
-		var listaCanciones = []
-		listaCanciones = canciones.filter({cancion =>
+		return canciones.filter({cancion =>
 							cancion.tienePalabra(unaPalabra)
 						})
-		return listaCanciones
 	}
 	
 	method duracionAlbum(){
