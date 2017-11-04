@@ -1,7 +1,7 @@
 import TP_PrimeraParte.*
 describe "Test de Primera Parte" {
-	var cisne = new Canciones()
-	var laFamilia = new Canciones()
+	var cisne = new Cancion()
+	var laFamilia = new Cancion()
 	var presentacion = new Presentacion()
 	var lunaPark = new Lugar()
 	var trastienda = new Lugar()

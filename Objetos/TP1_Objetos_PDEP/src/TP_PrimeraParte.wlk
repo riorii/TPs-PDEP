@@ -140,7 +140,7 @@ object gibson {
 	}
 }
 
-class Canciones {
+class Cancion {
 	var duracion
 	var letra
 	/*Setters */
