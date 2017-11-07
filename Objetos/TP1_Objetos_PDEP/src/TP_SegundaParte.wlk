@@ -32,14 +32,13 @@ class Musico {
 	}
 	// Funcionalidad 2
 	method cancionesConPalabra(unaPalabra){
-		/*Esta opcion comentada, wollow me dice que la intente anidar como si fuese un oneliner
-		 * para nosotros es lo mas prolijo, pero dejamos ambas opciones.
-		 *var listaCanciones = (albumes.map({album => album.cancionesConPalabra(unaPalabra.toLowerCase())})).flatten()
-		 *return listaCanciones.map({cancion => cancion.titulo()})
-		 */
-		 
-		// Opcion segun wollok
-		return ((albumes.map({album => album.cancionesConPalabra(unaPalabra.toLowerCase())})).flatten()).map({cancion => cancion.titulo()})
+		return self.obtenerTituloCanciones(self.obtenerListadoCancionesConPalabra(unaPalabra))
+	}
+	method obtenerListadoCancionesConPalabra(unaPalabra) {
+		return albumes.map({album => album.cancionesConPalabra(unaPalabra)}).flatten()
+	}
+	method obtenerTituloCanciones(listaCanciones) {
+		return listaCanciones.map({cancion => cancion.titulo()})
 	}
 	// Funcionalidad 3
 	method segundosDeObra(){ 
@@ -214,7 +213,7 @@ class Album{
 	}
 	method cancionesConPalabra(unaPalabra){
 		return canciones.filter({cancion =>
-							cancion.tienePalabra(unaPalabra)
+							cancion.tienePalabra(unaPalabra.toLowerCase())
 						})
 	}
 	
