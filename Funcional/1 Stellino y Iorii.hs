@@ -79,10 +79,10 @@ tienePotencial :: Int -> Gimnasta -> Bool
 tienePotencial n gimnasta = (nivelDeFortaleza.realizarEjerciciosPersonales.entrenar rutinaDiaria) gimnasta > n
 
 --4)
-nombreMaximoGenericoConRutina :: (Gimnasta -> Int) -> Rutina -> [Gimnasta] -> String
+nombreMaximoGenericoConRutina:: Ord b => (Gimnasta -> b) -> Rutina -> [Gimnasta] -> String
 nombreMaximoGenericoConRutina criterio_maximo rutina gimnastas = (nombre.maximoSegun criterio_maximo.entrenarGimnastasConRutina rutina) gimnastas
 
-nombreMaximoGenericoConEjercicio :: (Gimnasta -> Int) -> Ejercicio -> Int -> [Gimnasta] -> String
+nombreMaximoGenericoConEjercicio :: Ord b => (Gimnasta -> b) -> Ejercicio -> Int -> [Gimnasta] -> String
 nombreMaximoGenericoConEjercicio criterio_maximo ejercicio cantMinutos gimnastas = (nombre.maximoSegun criterio_maximo.entrenarConEjercicio ejercicio cantMinutos) gimnastas
 
 --a)
@@ -90,10 +90,11 @@ nombreMaximoGenericoConEjercicio criterio_maximo ejercicio cantMinutos gimnastas
 entrenarGimnastasConRutina :: Rutina -> [Gimnasta] -> [Gimnasta]
 entrenarGimnastasConRutina rutina gimnastas = map (entrenar rutina) gimnastas
 --Funcion de Orden Superior
-maximoSegun :: Ord b => (Gimnasta -> b) -> [Gimnasta] -> Gimnasta
-maximoSegun _ [elemento] = elemento
-maximoSegun funcion (x:y:xs) | funcion x > funcion y = maximoSegun funcion(x:xs)
-                             | otherwise = maximoSegun funcion(y:xs)
+mayorSegun :: Ord b => (Gimnasta -> b) -> Gimnasta -> Gimnasta -> Gimnasta
+mayorSegun f a b | (f a) < (f b) = b
+                 | otherwise = a
+maximoSegun :: (Foldable f, Ord a) => (Gimnasta -> a) -> f Gimnasta -> Gimnasta
+maximoSegun f = foldl1 (mayorSegun f)
 
 maximoDespuesDeRutina :: [Gimnasta] -> String
 maximoDespuesDeRutina gimnastas = nombreMaximoGenericoConRutina fuerza rutinaDiaria gimnastas
