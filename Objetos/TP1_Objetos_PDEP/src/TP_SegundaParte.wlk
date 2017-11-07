@@ -47,8 +47,19 @@ class Musico {
 	}
 	// Funcionalidad 5
 	method laPego(){
-		var porcentajes = albumes.map({album => album.porcentajeVendido()})
-		return ((porcentajes.sum())/porcentajes.size() > 75)
+		return (self.tuvoBuenaVenta(self.sacarPorcentajeDeTodosAlbumes()))
+	}
+	
+	method tuvoBuenaVenta(porcentajes) {
+		return (porcentajes.sum()/self.cantidadDeAlbumes() > 75)
+	}
+	
+	method cantidadDeAlbumes() {
+		return albumes.size()
+	}
+	
+	method sacarPorcentajeDeTodosAlbumes() {
+		return albumes.map({album => album.porcentajeVendido()})
 	}
 }
 
