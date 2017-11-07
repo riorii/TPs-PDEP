@@ -142,13 +142,13 @@ object gibson {
 
 class Cancion {
 	var duracion
-	var letra
+	var letra = []
 	/*Setters */
 	method duracion(unaDuracion) {
 		duracion = unaDuracion
 	}
-	method letra(unaLetra) {
-		letra = unaLetra
+	method letra(listaDePalabras) {
+		letra.addAll(listaDePalabras)
 	}
 	/*Getters */
 	method duracion() {

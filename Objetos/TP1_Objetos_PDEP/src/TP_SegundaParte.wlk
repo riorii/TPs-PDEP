@@ -245,7 +245,7 @@ class Cancion{
 		return titulo
 	}
 	method tienePalabra(unaPalabra) {
-		return (letra.toLowerCase().contains(unaPalabra))
+		return (letra.contains(unaPalabra))
 	}
 	
 	method esCorta(){
